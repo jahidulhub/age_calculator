@@ -1,220 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Age Calculator</title>
-  <!-- Materialize CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <style>
-    body {
-      padding-top: 10px;
-    }
-    .age-calculator-heading {
-      margin-bottom: 50px; /* Adjust the value as needed */
-    }
-    .age {
-      padding-bottom: 24px;
-    }
-    .card {
-      padding: 16px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail Sender</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
-<body>
-  <div class="container">
-    <div class="center-align">
-      <h5 class="age-calculator-heading">Age Calculator</h5>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div class="max-w-2xl mx-auto p-4">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <h1 class="text-2xl font-bold text-gray-800">Gmail Sender</h1>
+                </div>
+                <button id="logoutBtn" class="hidden flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    </svg>
+                    Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- User Info -->
+        <div id="userInfo" class="hidden bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center gap-4">
+                <img id="userPicture" src="" alt="User" class="w-12 h-12 rounded-full">
+                <div>
+                    <p id="userName" class="font-semibold text-gray-800"></p>
+                    <p id="userEmail" class="text-sm text-gray-600"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Screen -->
+        <div id="loginScreen" class="bg-white rounded-lg shadow-lg p-12 text-center">
+            <svg class="w-16 h-16 text-indigo-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome to Gmail Sender</h2>
+            <p class="text-gray-600 mb-8">Sign in with your Google account to start sending emails</p>
+            <button id="googleLoginBtn" class="inline-flex items-center gap-3 bg-white border-2 border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 transition shadow-sm">
+                <svg class="w-5 h-5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Sign in with Google
+            </button>
+            
+            <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-left">
+                <p class="text-sm font-semibold text-yellow-800 mb-2">Setup Required:</p>
+                <ol class="text-sm text-yellow-700 space-y-1 list-decimal list-inside">
+                    <li>Replace CLIENT_ID with your Google OAuth Client ID</li>
+                    <li>Enable Gmail API in Google Cloud Console</li>
+                    <li>Add authorized redirect URIs</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Email Composer -->
+        <div id="emailComposer" class="hidden bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-6">Compose Email</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">To</label>
+                    <input type="email" id="emailTo" placeholder="recipient@example.com" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                    <input type="text" id="emailSubject" placeholder="Email subject" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                    <textarea id="emailBody" placeholder="Write your message here..." rows="8" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
+                </div>
+
+                <div id="messageAlert" class="hidden p-4 rounded-lg"></div>
+
+                <button id="sendBtn" class="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                    Send Email
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="row">
-      <div class="col s12">
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="birthDate" type="text" class="datepicker" placeholder="e.g. 30 Dec 2020">
-            <label for="birthDate">Date of Birth</label>
-          </div>
-        </div>
 
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="currentDate" type="text" class="datepicker" placeholder="" required>
-            <label for="currentDate">Current Date</label>
-          </div>
-        </div>
+    <script>
+        // Configuration
+        const CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID';
+        const SCOPES = 'https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/userinfo.email';
+        
+        let accessToken = null;
+        let userInfo = null;
 
-        <div class="row">
-          <div class="input-field" style="padding-left: 10px;">
-            <button class="btn" onclick="checkAndCalculateAge()">Calculate Age</button>
-          </div>
-        </div>
-      </div>
-      <div class="col s12"> <!-- Adjust column width and offset as needed -->
-        <div class="card">
-          <div class="center-align age" id="result">
-            <h6 id="animated-text"></h6>
-          </div>
-          <div id="ageDetails">
+        // Get elements
+        const loginScreen = document.getElementById('loginScreen');
+        const emailComposer = document.getElementById('emailComposer');
+        const userInfoDiv = document.getElementById('userInfo');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const messageAlert = document.getElementById('messageAlert');
 
-          </div>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  
+        // Check for access token in URL (after OAuth redirect)
+        window.addEventListener('load', () => {
+            const hash = window.location.hash;
+            if (hash) {
+                const params = new URLSearchParams(hash.substring(1));
+                accessToken = params.get('access_token');
+                if (accessToken) {
+                    fetchUserInfo();
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            }
+        });
 
-  <!-- Materialize JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script>
-    var currentDate = new Date();
-    var currentYear = currentDate.getFullYear();
-    var eightyYearsAgo = currentYear - 80;
-    var currentDateFormatted = currentDate.getDate() + ' ' + getMonthAbbreviation(currentDate.getMonth()) + ' ' + currentDate.getFullYear();
+        // Google Login
+        googleLoginBtn.addEventListener('click', () => {
+            const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
+            const params = new URLSearchParams({
+                client_id: CLIENT_ID,
+                redirect_uri: window.location.origin + window.location.pathname,
+                response_type: 'token',
+                scope: SCOPES,
+                include_granted_scopes: 'true',
+                state: 'pass-through-value'
+            });
+            window.location.href = `${oauth2Endpoint}?${params.toString()}`;
+        });
 
-    document.addEventListener('DOMContentLoaded', function() {
-
-      var datepickerOptions = {
-        format: 'd mmm yyyy',
-        defaultDate: currentDate,
-        i18n: {
-          months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-          today: 'Today',
-          done: 'Done'
+        // Fetch user info
+        async function fetchUserInfo() {
+            try {
+                const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                
+                if (response.ok) {
+                    userInfo = await response.json();
+                    showEmailComposer();
+                } else {
+                    showMessage('Failed to fetch user info', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
         }
-      };
-      
-      var currentDateElem = document.getElementById('currentDate');
-      currentDateElem.value = currentDateFormatted;
-      var currentDateInstance = M.Datepicker.init(currentDateElem, { ...datepickerOptions, defaultDate: currentDate });
 
-      var datepickerElems = document.querySelectorAll('.datepicker');
-      var datepickerInstances = M.Datepicker.init(datepickerElems, datepickerOptions);
-      
-      var datepickerElem = document.getElementById('birthDate');
+        // Show email composer
+        function showEmailComposer() {
+            loginScreen.classList.add('hidden');
+            emailComposer.classList.remove('hidden');
+            userInfoDiv.classList.remove('hidden');
+            logoutBtn.classList.remove('hidden');
 
-      var datepickerInstance = M.Datepicker.init(datepickerElem, {
-        ...datepickerOptions,
-        maxDate: currentDate,
-        yearRange: [eightyYearsAgo, currentYear], // Change the year range here
-      });
+            document.getElementById('userName').textContent = userInfo.name;
+            document.getElementById('userEmail').textContent = userInfo.email;
+            document.getElementById('userPicture').src = userInfo.picture;
+        }
 
-      typeWriter()
-    });
-    
-    var birthDateValid = document.getElementById('birthDate').value
-    function checkAndCalculateAge() {
-      var birthDateInput = document.getElementById('birthDate');
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            accessToken = null;
+            userInfo = null;
+            loginScreen.classList.remove('hidden');
+            emailComposer.classList.add('hidden');
+            userInfoDiv.classList.add('hidden');
+            logoutBtn.classList.add('hidden');
+            document.getElementById('emailTo').value = '';
+            document.getElementById('emailSubject').value = '';
+            document.getElementById('emailBody').value = '';
+            messageAlert.classList.add('hidden');
+        });
 
-      // Check if birth date input field is not empty or null
-      if (birthDateInput && birthDateInput.value) {
-        calculateAge();
-      } else {
-        // Handle case where birth date input is empty or null
-        alert("Please enter a valid birth date.");
-      }
-    }
-    function calculateAge() {
-      // Get the value of the birth date input field and convert it to a Date object
-      var birthDate = new Date(document.getElementById('birthDate').value); 
-      
-      // Get the value of the current date input field and convert it to a Date object
-      var currentDate = new Date(document.getElementById('currentDate').value);
-      var ageInMilliseconds = currentDate - birthDate;
-      var ageInSeconds = ageInMilliseconds / 1000;
-      var ageInMinutes = ageInSeconds / 60;
-      var ageInHours = ageInMinutes / 60;
-      var ageInDays = ageInHours / 24;
-      var ageInMonths = ageInDays / 30.436875; // Average month length
-      var ageInYears = ageInMonths / 12;
+        // Create email in base64 format
+        function createEmail(to, subject, body) {
+            const email = [
+                `To: ${to}`,
+                `Subject: ${subject}`,
+                '',
+                body
+            ].join('\n');
 
-      // Calculate the difference in years, months, and days between current date and birth date
-      var yearsDiff = currentDate.getFullYear() - birthDate.getFullYear();
-      var monthsDiff = currentDate.getMonth() - birthDate.getMonth();
-      var daysDiff = currentDate.getDate() - birthDate.getDate();
+            return btoa(unescape(encodeURIComponent(email)))
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=+$/, '');
+        }
 
-      
-      // Adjust for negative months or days difference
-      if (monthsDiff < 0 || (monthsDiff === 0 && daysDiff < 0)) {
-        yearsDiff--; // Adjust years
-        monthsDiff += 12; // Adjust months
-      }
-      if (daysDiff < 0) {
-        monthsDiff--; // Adjust months
-        // Calculate the number of days in the previous month
-        var prevMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 0);
-        daysDiff += prevMonthDate.getDate();
-      }
-      
-      // Construct the age string
-      var ageString = '';
-      if (yearsDiff > 0) {
-        ageString += yearsDiff + ' year' + (yearsDiff > 1 ? 's ' : ' ');
-      }
-      if (monthsDiff > 0) {
-        ageString += monthsDiff + ' month' + (monthsDiff > 1 ? 's ' : ' ');
-      }
-      if (daysDiff > 0) {
-        ageString += daysDiff + ' day' + (daysDiff > 1 ? 's' : '');
-      }
-      
-      // Display the calculated age
-      document.getElementById('result').innerHTML = '<strong style="font-size: 20px;">Your are ' + ageString + ' old</strong>';
+        // Show message
+        function showMessage(text, type) {
+            messageAlert.textContent = text;
+            messageAlert.className = `p-4 rounded-lg ${
+                type === 'success' 
+                    ? 'bg-green-50 text-green-800 border border-green-200' 
+                    : 'bg-red-50 text-red-800 border border-red-200'
+            }`;
+            messageAlert.classList.remove('hidden');
+        }
 
-      // Remove any existing table from the ageDetails element
-      var existingTable = document.getElementById("ageDetails").querySelector("table");
-      if (existingTable) {
-        existingTable.remove();
-      }
+        // Send email
+        sendBtn.addEventListener('click', async () => {
+            const to = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
 
-      // Create a table element
-      var table = document.createElement("table");
+            if (!to || !subject || !body) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
 
-      // Create table rows and cells for each piece of information
-      var rows = [
-        { label: "Age in Years", value: Math.floor(ageInYears) },
-        { label: "Age in Months", value: Math.floor(ageInMonths) },
-        { label: "Age in Days", value: Math.floor(ageInDays) },
-        { label: "Age in Hours", value: Math.floor(ageInHours) },
-        { label: "Age in Minutes", value: Math.floor(ageInMinutes) },
-        { label: "Age in Seconds", value: Math.floor(ageInSeconds) },
-        { label: "Age in Milliseconds", value: Math.floor(ageInMilliseconds) }
-      ];
+            if (!accessToken) {
+                showMessage('Please complete Google authentication first', 'error');
+                return;
+            }
 
-      // Iterate through each row and create table rows and cells
-      rows.forEach(function(rowData) {
-        var row = table.insertRow();
-        var labelCell = row.insertCell(0);
-        var valueCell = row.insertCell(1);
-        labelCell.textContent = rowData.label;
-        valueCell.textContent = rowData.value;
-      });
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = `
+                <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Sending...
+            `;
 
-      // Append the table to the ageDetails element
-      document.getElementById("ageDetails").appendChild(table);
-      table.classList.add("striped");
+            try {
+                const encodedEmail = createEmail(to, subject, body);
+                const response = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ raw: encodedEmail })
+                });
 
-    }
-    function getMonthAbbreviation(monthIndex) {
-      var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      return months[monthIndex];
-    }
-
-
-    // type writer animaiton effect
-    var i = 0;
-    var txt = "✨ Type your birthday!"; /* The text */
-    var speed = 50; /* The speed/duration of the effect in milliseconds */
-
-    function typeWriter() {
-      if (i < txt.length) {
-        document.getElementById("animated-text").innerHTML += txt.charAt(i);
-        i++;
-        setTimeout(typeWriter, speed);
-      }
-    }
-  </script>
+                if (response.ok) {
+                    showMessage('Email sent successfully!', 'success');
+                    document.getElementById('emailTo').value = '';
+                    document.getElementById('emailSubject').value = '';
+                    document.getElementById('emailBody').value = '';
+                } else {
+                    const error = await response.json();
+                    showMessage(`Failed to send email: ${error.error.message}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`Error: ${error.message}`, 'error');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = `
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                    Send Email
+                `;
+            }
+        });
+    </script>
 </body>
 </html>
